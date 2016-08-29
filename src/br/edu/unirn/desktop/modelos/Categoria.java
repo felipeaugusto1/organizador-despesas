@@ -1,17 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.unirn.desktop.modelos;
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author felipe
  */
-public class Categoria {
+@Entity
+public class Categoria implements Serializable {
     
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private String nome;
 
     public Categoria() {
@@ -21,7 +26,7 @@ public class Categoria {
         this.nome = nome;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -29,12 +34,17 @@ public class Categoria {
         return nome;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+
 }

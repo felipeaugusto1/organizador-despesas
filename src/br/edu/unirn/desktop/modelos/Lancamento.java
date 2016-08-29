@@ -1,30 +1,51 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.unirn.desktop.modelos;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author felipe
  */
-public class Lancamento {
+@Entity
+public class Lancamento implements Serializable {
     
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private double valor;
-    private Categoria categoria;
+    private String descricao;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(insertable = true, updatable = false)
     private Date data = new Date();
+    
+    @OneToOne
+    private Categoria categoria;
+    
+    @Enumerated(EnumType.STRING)
     private TipoLancamento tipoLancamento;
+    
+    @OneToOne
     private Usuario usuario;
 
     public Lancamento() {
     }
 
-    public Lancamento(double valor, Categoria categoria, TipoLancamento tipoLancamento, Usuario usuario) {
+    public Lancamento(double valor, String descricao, Categoria categoria, TipoLancamento tipoLancamento, Usuario usuario) {
         this.valor = valor;
+        this.descricao = descricao;
         this.categoria = categoria;
         this.tipoLancamento = tipoLancamento;
         this.usuario = usuario;
@@ -34,7 +55,7 @@ public class Lancamento {
         return categoria;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -54,11 +75,19 @@ public class Lancamento {
         return data;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

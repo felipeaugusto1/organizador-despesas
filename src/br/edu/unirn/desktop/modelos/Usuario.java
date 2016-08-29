@@ -1,17 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.unirn.desktop.modelos;
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author felipe
  */
-public class Usuario {
+@Entity
+public class Usuario implements Serializable {
     
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     private String nome;
     private String email;
     private String usuario;
@@ -31,7 +36,7 @@ public class Usuario {
         return email;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -51,7 +56,7 @@ public class Usuario {
         this.email = email;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
