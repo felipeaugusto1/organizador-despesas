@@ -102,5 +102,12 @@ public class Lancamento implements Serializable {
     public void setValor(double valor) {
         this.valor = valor;
     }
+
+    @Override
+    public String toString() {
+        return id+" - " +descricao+" - " +valor;
+    }
+ 
+    
     
 }

@@ -1,5 +1,7 @@
 package br.edu.unirn.desktop.telas.novousuario;
 
+import br.edu.unirn.desktop.OrganizadorDespesas;
+import br.edu.unirn.desktop.modelos.Usuario;
 import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +37,14 @@ public class NovoUsuarioController implements Initializable {
     
     @FXML
     public void btnCadastrarUsuario(ActionEvent event) {
+        try {
+            Usuario usuario = new Usuario(txtNome.getText(), txtEmail.getText(), txtUsuario.getText(), txtSenha.getText());
+        OrganizadorDespesas.getUsuarioDao().salvar(usuario);
         MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Novo Usuário", "Usuário cadastrado com sucesso!");
+        } catch (Exception e) {
+            MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Novo Usuário", "Ocorreu algum erro ao realizar o cadastro.");
+        }
+        
     }
     
 }

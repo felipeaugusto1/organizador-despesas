@@ -41,12 +41,25 @@ public abstract class GenericDao <T, ID extends Serializable> {
 
     public T atualizar(T entidade) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
-        return em.merge(entidade);
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        
+        T ob = em.merge(entidade);
+        
+        t.commit();
+        
+        return ob;
     }
 
     public void remover(T entidade) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
-        em.remove(entidade);
+        EntityTransaction t = em.getTransaction();
+        t.begin();
+        
+        T ent = em.merge(entidade);
+        em.remove(ent);
+        
+        t.commit();
     }
     
     public List<T> listarTodos() {
@@ -58,7 +71,7 @@ public abstract class GenericDao <T, ID extends Serializable> {
         return em.createQuery(query).getResultList();
     }	
     
-    public T buscarPorId(int id) {
+    public T buscarPorId(long id) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         return em.find(classe, id);
     }

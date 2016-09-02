@@ -3,7 +3,6 @@ package br.edu.unirn.desktop;
 import br.edu.unirn.desktop.dao.CategoriaDao;
 import br.edu.unirn.desktop.dao.LancamentoDao;
 import br.edu.unirn.desktop.dao.UsuarioDao;
-import br.edu.unirn.desktop.modelos.Categoria;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

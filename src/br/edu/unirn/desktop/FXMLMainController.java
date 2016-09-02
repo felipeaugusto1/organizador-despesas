@@ -1,5 +1,8 @@
 package br.edu.unirn.desktop;
 
+import br.edu.unirn.desktop.modelos.Usuario;
+import br.edu.unirn.desktop.singleton.UsuarioSingleton;
+import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -8,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -31,11 +35,19 @@ public class FXMLMainController implements Initializable {
     @FXML
     public void btnLogin(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/listagemlancamentos/ListagemLancamentos.fxml"));
-            Stage stage = new Stage();
-            stage.setTitle("Organizador de Despesas");
-            stage.setScene(new Scene(root));
-            stage.show();
+            Usuario u = OrganizadorDespesas.getUsuarioDao().login(txtUsuario.getText(), txtSenha.getText());
+            
+            if (u != null) {
+                UsuarioSingleton.getInstancia().setUsuario(u);
+                
+                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/listagemlancamentos/ListagemLancamentos.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Organizador de Despesas");
+                stage.setScene(new Scene(root));
+                stage.show();
+            } else {
+                MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Usuário Inválido", "Usuario ou senha inválidos.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
