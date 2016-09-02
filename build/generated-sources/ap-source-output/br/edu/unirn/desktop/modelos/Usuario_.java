@@ -1,6 +1,7 @@
 package br.edu.unirn.desktop.modelos;
 
 import javax.annotation.Generated;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -9,6 +10,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Usuario_ {
 
 	public static volatile SingularAttribute<Usuario, String> senha;
+	public static volatile ListAttribute<Usuario, Lancamento> lancamentos;
 	public static volatile SingularAttribute<Usuario, String> nome;
 	public static volatile SingularAttribute<Usuario, String> usuario;
 	public static volatile SingularAttribute<Usuario, Long> id;

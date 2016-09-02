@@ -1,10 +1,12 @@
 package br.edu.unirn.desktop.modelos;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -21,6 +23,9 @@ public class Usuario implements Serializable {
     private String email;
     private String usuario;
     private String senha;
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Lancamento> lancamentos;
 
     public Usuario() {
     }
@@ -70,6 +75,14 @@ public class Usuario implements Serializable {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
+    }
+
+    public void setLancamentos(List<Lancamento> lancamentos) {
+        this.lancamentos = lancamentos;
     }
     
 }

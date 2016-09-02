@@ -104,7 +104,7 @@ public class ListagemLancamentosController implements Initializable {
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);
         observableListLancamento.clear();
-        observableListLancamento.addAll(OrganizadorDespesas.getLancamentoDao().listarTodos());
+        observableListLancamento.addAll(OrganizadorDespesas.getLancamentoDao().listarLancamentosPorUsuario(UsuarioSingleton.getInstancia().getUsuario()));
         tbLancamentos.setItems(observableListLancamento);
     }
     
@@ -117,12 +117,15 @@ public class ListagemLancamentosController implements Initializable {
         lancamento.setValor(Double.parseDouble(txtValor.getText()));
         lancamento.setTipoLancamento(comboTipoLancamento.getSelectionModel().getSelectedItem().equals(RECEITA) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
         lancamento.setCategoria(comboCategoria.getSelectionModel().getSelectedItem());
+        lancamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
         
         if (lancamento.getId() == null)
             OrganizadorDespesas.getLancamentoDao().salvar(lancamento);
         else
             OrganizadorDespesas.getLancamentoDao().atualizar(lancamento);
             
+        
+        lancamento = null;
         atualizarLista();
     }
     
@@ -173,7 +176,7 @@ public class ListagemLancamentosController implements Initializable {
         try {
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/usuario/Usuario.fxml"));
             Stage stage = new Stage();
-            stage.setTitle("Novo Lançamento");
+            stage.setTitle("Usuário");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
@@ -183,7 +186,7 @@ public class ListagemLancamentosController implements Initializable {
     
     @FXML
     public void sairAplicacao(ActionEvent event) {
-        UsuarioSingleton.getInstancia().sairAplicacao();
+        //UsuarioSingleton.getInstancia().sairAplicacao();
     }
     
     private void exibirBtnDelete(boolean exibir) {

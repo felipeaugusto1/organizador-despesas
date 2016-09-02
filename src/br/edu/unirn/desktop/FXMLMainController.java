@@ -56,7 +56,7 @@ public class FXMLMainController implements Initializable {
     @FXML
     public void clickNovoCadastro(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/novousuario/NovoUsuario.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/usuario/Usuario.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Novo Usuário");
             stage.setScene(new Scene(root));

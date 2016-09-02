@@ -39,12 +39,19 @@ public class UsuarioController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (UsuarioSingleton.getInstancia().getUsuario() == null) {
+        Usuario usuario = UsuarioSingleton.getInstancia().getUsuario();
+        
+        if (usuario == null) {
             exibirBtnExcluirConta(false);
             setLabelBtnSalvar(CommonStrings.CADASTRAR);
         } else {
             exibirBtnExcluirConta(true);
             setLabelBtnSalvar(CommonStrings.ATUALIZAR);
+            
+            txtNome.setText(usuario.getNome());
+            txtEmail.setText(usuario.getEmail());
+            txtUsuario.setText(usuario.getUsuario());
+            txtSenha.setText(usuario.getSenha());
         }
     }    
 

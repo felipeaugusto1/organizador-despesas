@@ -83,6 +83,7 @@ public class ListagemCategoriasController implements Initializable {
             else
                 OrganizadorDespesas.getCategoriaDao().atualizar(categoria);
             
+            categoria = null;
             MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria salva com sucesso!");
             
             atualizarLista();

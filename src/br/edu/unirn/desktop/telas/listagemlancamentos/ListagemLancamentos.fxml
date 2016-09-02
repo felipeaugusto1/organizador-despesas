@@ -28,8 +28,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="Conta">
             <items>
-              <MenuItem mnemonicParsing="false" text="Meus dados" />
-                  <MenuItem mnemonicParsing="false" text="Sair" />
+              <MenuItem mnemonicParsing="false" onAction="#visualizarContaUsuario" text="Meus dados" />
+                  <MenuItem mnemonicParsing="false" onAction="#sairAplicacao" text="Sair" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Sobre" />
