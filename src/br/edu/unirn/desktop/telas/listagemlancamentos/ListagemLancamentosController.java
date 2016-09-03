@@ -67,23 +67,27 @@ public class ListagemLancamentosController implements Initializable {
     
     @FXML
     private Button btnDeletar;
+    
     @FXML
     private Button btnSalvar;
     
     private Lancamento lancamento;
-    private final String RECEITA = "Receita";
-    private final String DESPESA = "Despesa";
-    
     public ObservableList<Lancamento> observableListLancamento = FXCollections.observableArrayList();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         List<String> tipoLancamentos = new ArrayList<>();
-        tipoLancamentos.add(RECEITA);
-        tipoLancamentos.add(DESPESA);
+        tipoLancamentos.add(TipoLancamento.RECEITA.getValor());
+        tipoLancamentos.add(TipoLancamento.DESPESA.getValor());
         
-        comboCategoria.getItems().addAll(OrganizadorDespesas.getCategoriaDao().listarTodos());
+        List<Categoria> categorias = OrganizadorDespesas.getCategoriaDao().listarTodos();
+        
+        comboCategoria.getItems().addAll(categorias);
+        if (categorias.size() > 0)
+            comboCategoria.getSelectionModel().select(categorias.get(0));
+        
         comboTipoLancamento.getItems().addAll(tipoLancamentos);
+        comboTipoLancamento.getSelectionModel().select(tipoLancamentos.get(0));
         
         lancamento = null;
         
@@ -101,6 +105,7 @@ public class ListagemLancamentosController implements Initializable {
     }
     
     private void atualizarLista() {
+        limparCampos();
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);
         observableListLancamento.clear();
@@ -115,7 +120,7 @@ public class ListagemLancamentosController implements Initializable {
             
         lancamento.setDescricao(txtDescricao.getText());
         lancamento.setValor(Double.parseDouble(txtValor.getText()));
-        lancamento.setTipoLancamento(comboTipoLancamento.getSelectionModel().getSelectedItem().equals(RECEITA) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
+        lancamento.setTipoLancamento(comboTipoLancamento.getSelectionModel().getSelectedItem().equals(TipoLancamento.RECEITA.getValor()) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
         lancamento.setCategoria(comboCategoria.getSelectionModel().getSelectedItem());
         lancamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
         
@@ -152,11 +157,15 @@ public class ListagemLancamentosController implements Initializable {
         txtDescricao.setText(lancamento.getDescricao());
         txtValor.setText(String.valueOf(lancamento.getValor()));
         comboCategoria.getSelectionModel().select(lancamento.getCategoria());
-        comboTipoLancamento.getSelectionModel().select(lancamento.getTipoLancamento() == TipoLancamento.RECEITA ? RECEITA : DESPESA);
+        comboTipoLancamento.getSelectionModel().select(lancamento.getTipoLancamento());
     }
     
     @FXML
     public void limparCampos(ActionEvent event) {
+        limparCampos();
+    }
+    
+    private void limparCampos() {
         lancamento = null;
         txtDescricao.setText("");
         txtValor.setText("");

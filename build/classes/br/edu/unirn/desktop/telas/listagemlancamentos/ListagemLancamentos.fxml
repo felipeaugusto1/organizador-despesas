@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="734.0" prefWidth="732.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.unirn.desktop.telas.listagemlancamentos.ListagemLancamentosController">
    <children>
@@ -40,12 +41,16 @@
             </Menu>
         </menus>
       </MenuBar>
-      <TextField fx:id="txtDescricao" layoutX="14.0" layoutY="204.0" />
-      <TextField fx:id="txtValor" layoutX="189.0" layoutY="204.0" prefHeight="27.0" prefWidth="100.0" />
-      <ComboBox fx:id="comboCategoria" layoutX="300.0" layoutY="204.0" prefWidth="150.0" />
-      <ComboBox fx:id="comboTipoLancamento" layoutX="457.0" layoutY="204.0" prefWidth="150.0" />
-      <Button fx:id="btnSalvar" layoutX="21.0" layoutY="234.0" mnemonicParsing="false" onAction="#btnSalvarLancamento" text="Salvar" />
-      <Button fx:id="btnDeletar" layoutX="247.0" layoutY="235.0" mnemonicParsing="false" onAction="#deletarLancamento" text="Deletar" />
-      <Button layoutX="106.0" layoutY="233.0" mnemonicParsing="false" onAction="#limparCampos" text="Limpar Campos" />
+      <TextField fx:id="txtDescricao" layoutX="115.0" layoutY="62.0" />
+      <TextField fx:id="txtValor" layoutX="115.0" layoutY="97.0" prefHeight="27.0" prefWidth="167.0" />
+      <ComboBox fx:id="comboCategoria" layoutX="115.0" layoutY="167.0" prefHeight="27.0" prefWidth="167.0" />
+      <ComboBox fx:id="comboTipoLancamento" layoutX="115.0" layoutY="132.0" prefHeight="27.0" prefWidth="167.0" />
+      <Button fx:id="btnSalvar" layoutX="15.0" layoutY="216.0" mnemonicParsing="false" onAction="#btnSalvarLancamento" prefHeight="27.0" prefWidth="86.0" text="Cadastrar" />
+      <Button fx:id="btnDeletar" layoutX="257.0" layoutY="216.0" mnemonicParsing="false" onAction="#deletarLancamento" text="Deletar" />
+      <Button layoutX="115.0" layoutY="216.0" mnemonicParsing="false" onAction="#limparCampos" prefHeight="27.0" prefWidth="127.0" text="Limpar Campos" />
+      <Text layoutX="15.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição:" />
+      <Text layoutX="15.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor:" />
+      <Text layoutX="15.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo: " />
+      <Text layoutX="15.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Categoria:" />
    </children>
 </AnchorPane>

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.unirn.desktop.telas.listagemcategorias;
 
 import br.edu.unirn.desktop.OrganizadorDespesas;
@@ -47,7 +42,6 @@ public class ListagemCategoriasController implements Initializable {
     private Button btnSalvar;
     
     private Categoria categoria;
-    
     public ObservableList<Categoria> observableListCategoria = FXCollections.observableArrayList();
     
     @Override
@@ -63,6 +57,7 @@ public class ListagemCategoriasController implements Initializable {
     }
     
     private void atualizarLista() {
+        limparCampos();
         observableListCategoria.clear();
         observableListCategoria.addAll(OrganizadorDespesas.getCategoriaDao().listarTodos());
         tvCategorias.setItems(observableListCategoria);
@@ -78,13 +73,15 @@ public class ListagemCategoriasController implements Initializable {
             
             categoria.setNome(txtNome.getText());
             
-            if (categoria.getId() == null)
+            if (categoria.getId() == null) {
+                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria cadastrada com sucesso!");
                 OrganizadorDespesas.getCategoriaDao().salvar(categoria);
-            else
+            } else {
+                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria atualizada com sucesso!");
                 OrganizadorDespesas.getCategoriaDao().atualizar(categoria);
+            }
             
             categoria = null;
-            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria salva com sucesso!");
             
             atualizarLista();
         } catch (Exception e) {
@@ -103,6 +100,10 @@ public class ListagemCategoriasController implements Initializable {
     
     @FXML
     public void btnLimparCampos(ActionEvent event) {
+        limparCampos();
+    }
+    
+    private void limparCampos() {
         categoria = null;
         txtNome.setText("");
         exibirBtnDelete(false);

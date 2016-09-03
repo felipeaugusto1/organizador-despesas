@@ -4,11 +4,13 @@ import br.edu.unirn.desktop.OrganizadorDespesas;
 import br.edu.unirn.desktop.modelos.Usuario;
 import br.edu.unirn.desktop.singleton.UsuarioSingleton;
 import br.edu.unirn.desktop.utils.CommonStrings;
+import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
@@ -66,6 +68,8 @@ public class UsuarioController implements Initializable {
             
             UsuarioSingleton.getInstancia().setUsuario(usuario);
             OrganizadorDespesas.getUsuarioDao().atualizar(usuario);
+            
+            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário atualizado com sucesso!");
         } else {
             usuario = new Usuario();
             
@@ -75,13 +79,20 @@ public class UsuarioController implements Initializable {
             usuario.setSenha(txtSenha.getText());
             
             OrganizadorDespesas.getUsuarioDao().salvar(usuario);
+            
+            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário cadastrado com sucesso!");
         }
     }
     
     @FXML
     public void btnExcluirConta(ActionEvent event) {
-        OrganizadorDespesas.getUsuarioDao().remover(UsuarioSingleton.getInstancia().getUsuario());
-        UsuarioSingleton.getInstancia().sairAplicacao();
+        try {
+            OrganizadorDespesas.getUsuarioDao().remover(UsuarioSingleton.getInstancia().getUsuario());
+            UsuarioSingleton.getInstancia().sairAplicacao();
+            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário excluído com sucesso!");
+        } catch (Exception e) {
+            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Ocorreu algum erro ao excluir o usuário.");
+        }
     }
     
     private void exibirBtnExcluirConta(boolean exibir) {

@@ -1,5 +1,6 @@
 package br.edu.unirn.desktop.modelos;
 
+import br.edu.unirn.desktop.utils.DateUtils;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -60,8 +61,8 @@ public class Lancamento implements Serializable {
         return id;
     }
 
-    public TipoLancamento getTipoLancamento() {
-        return tipoLancamento;
+    public String getTipoLancamento() {
+        return tipoLancamento == TipoLancamento.RECEITA ? TipoLancamento.RECEITA.getValor() : TipoLancamento.DESPESA.getValor();
     }
 
     public Usuario getUsuario() {
@@ -72,8 +73,8 @@ public class Lancamento implements Serializable {
         return valor;
     }
 
-    public Date getData() {
-        return data;
+    public String getData() {
+        return DateUtils.formatarData(data);
     }
 
     public String getDescricao() {

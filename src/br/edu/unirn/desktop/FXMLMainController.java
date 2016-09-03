@@ -45,12 +45,18 @@ public class FXMLMainController implements Initializable {
                 stage.setTitle("Organizador de Despesas");
                 stage.setScene(new Scene(root));
                 stage.show();
+                
+                fecharTelaLogin();
             } else {
                 MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Usuário Inválido", "Usuario ou senha inválidos.");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private void fecharTelaLogin() {
+        ((Stage) txtSenha.getScene().getWindow()).close();
     }
     
     @FXML
