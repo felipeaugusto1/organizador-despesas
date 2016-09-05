@@ -3,6 +3,7 @@ package br.edu.unirn.desktop.dao;
 import static br.edu.unirn.desktop.dao.GenericDao.getEntityManagerFactory;
 import br.edu.unirn.desktop.modelos.Lancamento;
 import br.edu.unirn.desktop.modelos.Usuario;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,7 +20,7 @@ public class LancamentoDao extends GenericDao<Lancamento, Long> {
         super(Lancamento.class);
     }   
     
-    public Lancamento listarLancamentosPorUsuario(Usuario usuario) {
+    public List<Lancamento> listarLancamentosPorUsuario(Usuario usuario) {
         try {
             EntityManager em = getEntityManagerFactory().createEntityManager();
                 
@@ -32,7 +33,7 @@ public class LancamentoDao extends GenericDao<Lancamento, Long> {
             
             criteria.where(where);
         
-            return em.createQuery(criteria).getSingleResult();
+            return em.createQuery(criteria).getResultList();
         } catch (Exception e) {
             return null;
         }

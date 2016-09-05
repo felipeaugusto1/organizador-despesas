@@ -19,10 +19,6 @@ public class UsuarioSingleton {
         
         return instancia;
     }
-    
-    public void sairAplicacao() {
-        setUsuario(null);
-    }
 
     public Usuario getUsuario() {
         return usuario;

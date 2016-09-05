@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -33,8 +32,11 @@ public class Lancamento implements Serializable {
     @Column(insertable = true, updatable = false)
     private Date data = new Date();
     
-    @OneToOne
+    @ManyToOne
     private Categoria categoria;
+    
+    @ManyToOne
+    private FormaPagamento formaPagamento;
     
     @Enumerated(EnumType.STRING)
     private TipoLancamento tipoLancamento;
@@ -45,10 +47,12 @@ public class Lancamento implements Serializable {
     public Lancamento() {
     }
 
-    public Lancamento(double valor, String descricao, Categoria categoria, TipoLancamento tipoLancamento, Usuario usuario) {
+    public Lancamento(Long id, double valor, String descricao, Categoria categoria, FormaPagamento formaPagamento, TipoLancamento tipoLancamento, Usuario usuario) {
+        this.id = id;
         this.valor = valor;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.formaPagamento = formaPagamento;
         this.tipoLancamento = tipoLancamento;
         this.usuario = usuario;
     }
@@ -105,11 +109,16 @@ public class Lancamento implements Serializable {
         this.valor = valor;
     }
 
-    @Override
-    public String toString() {
-        return id+" - " +descricao+" - " +valor;
+    public void setData(Date data) {
+        this.data = data;
     }
- 
-    
-    
+
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
 }

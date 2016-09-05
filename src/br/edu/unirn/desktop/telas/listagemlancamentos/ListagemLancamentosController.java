@@ -2,9 +2,11 @@ package br.edu.unirn.desktop.telas.listagemlancamentos;
 
 import br.edu.unirn.desktop.OrganizadorDespesas;
 import br.edu.unirn.desktop.modelos.Categoria;
+import br.edu.unirn.desktop.modelos.FormaPagamento;
 import br.edu.unirn.desktop.modelos.Lancamento;
 import br.edu.unirn.desktop.modelos.TipoLancamento;
 import br.edu.unirn.desktop.singleton.UsuarioSingleton;
+import br.edu.unirn.desktop.utils.AppUtils;
 import br.edu.unirn.desktop.utils.CommonStrings;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -28,11 +31,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author felipe
- */
 public class ListagemLancamentosController implements Initializable {
     
     @FXML
@@ -60,7 +58,13 @@ public class ListagemLancamentosController implements Initializable {
     private TableColumn<Lancamento, String> tcDescricao;
     
     @FXML
+    private TableColumn<Lancamento, FormaPagamento> tcFormaPagamento;
+    
+    @FXML
     private ComboBox<Categoria> comboCategoria;
+    
+    @FXML
+    private ComboBox<FormaPagamento> comboFormaPagamento;
     
     @FXML
     private ComboBox<String> comboTipoLancamento;
@@ -70,6 +74,9 @@ public class ListagemLancamentosController implements Initializable {
     
     @FXML
     private Button btnSalvar;
+    
+    @FXML
+    private Label txtSaldo;
     
     private Lancamento lancamento;
     public ObservableList<Lancamento> observableListLancamento = FXCollections.observableArrayList();
@@ -81,15 +88,22 @@ public class ListagemLancamentosController implements Initializable {
         tipoLancamentos.add(TipoLancamento.DESPESA.getValor());
         
         List<Categoria> categorias = OrganizadorDespesas.getCategoriaDao().listarTodos();
+        List<FormaPagamento> formasPagamento = OrganizadorDespesas.getFormaPagamentoDao().buscarFormasPagamentoPorUsuario(UsuarioSingleton.getInstancia().getUsuario());
         
         comboCategoria.getItems().addAll(categorias);
         if (categorias.size() > 0)
             comboCategoria.getSelectionModel().select(categorias.get(0));
         
+        comboFormaPagamento.getItems().addAll(formasPagamento);
+        if (formasPagamento.size() > 0)
+            comboFormaPagamento.getSelectionModel().select(formasPagamento.get(0));
+        
         comboTipoLancamento.getItems().addAll(tipoLancamentos);
         comboTipoLancamento.getSelectionModel().select(tipoLancamentos.get(0));
         
         lancamento = null;
+        
+        tbLancamentos.setPlaceholder(new Label("Nenhum lançamento cadastrado."));
         
         carregarListaLancamentos();
     }   
@@ -100,17 +114,34 @@ public class ListagemLancamentosController implements Initializable {
         tcCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
         tcTipo.setCellValueFactory(new PropertyValueFactory<>("tipoLancamento"));
         tcDescricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+        tcFormaPagamento.setCellValueFactory(new PropertyValueFactory<>("formaPagamento"));
         
         atualizarLista();
     }
     
     private void atualizarLista() {
+        List<Lancamento> lancamentos = OrganizadorDespesas.getLancamentoDao().listarLancamentosPorUsuario(UsuarioSingleton.getInstancia().getUsuario());
+        
+        txtSaldo.setText(String.valueOf(calcularSaldo(lancamentos)));
         limparCampos();
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);
         observableListLancamento.clear();
-        observableListLancamento.addAll(OrganizadorDespesas.getLancamentoDao().listarLancamentosPorUsuario(UsuarioSingleton.getInstancia().getUsuario()));
+        observableListLancamento.addAll(lancamentos);
         tbLancamentos.setItems(observableListLancamento);
+    }
+    
+    private double calcularSaldo(List<Lancamento> lancamentos) {
+        double saldo = 0;
+        
+        for (Lancamento l : lancamentos) {
+            if (l.getTipoLancamento().equals(TipoLancamento.RECEITA.getValor()))
+                saldo += l.getValor();
+            else
+                saldo -= l.getValor();
+        }
+        
+        return saldo;
     }
     
     @FXML
@@ -123,13 +154,13 @@ public class ListagemLancamentosController implements Initializable {
         lancamento.setTipoLancamento(comboTipoLancamento.getSelectionModel().getSelectedItem().equals(TipoLancamento.RECEITA.getValor()) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
         lancamento.setCategoria(comboCategoria.getSelectionModel().getSelectedItem());
         lancamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+        lancamento.setFormaPagamento(comboFormaPagamento.getSelectionModel().getSelectedItem());
         
         if (lancamento.getId() == null)
             OrganizadorDespesas.getLancamentoDao().salvar(lancamento);
         else
             OrganizadorDespesas.getLancamentoDao().atualizar(lancamento);
             
-        
         lancamento = null;
         atualizarLista();
     }
@@ -148,16 +179,32 @@ public class ListagemLancamentosController implements Initializable {
     }
     
     @FXML
+    public void btnListarFormasPagamento(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/formaspagamento/FormasPagamento.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Formas de Pagamento");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
     public void selecionarLancamento(MouseEvent event) {
-        exibirBtnDelete(true);
-        setLabelBtnSalvar(CommonStrings.ATUALIZAR);
-        
         lancamento = tbLancamentos.getSelectionModel().getSelectedItem();
         
-        txtDescricao.setText(lancamento.getDescricao());
-        txtValor.setText(String.valueOf(lancamento.getValor()));
-        comboCategoria.getSelectionModel().select(lancamento.getCategoria());
-        comboTipoLancamento.getSelectionModel().select(lancamento.getTipoLancamento());
+        if (lancamento != null) {
+            txtDescricao.setText(lancamento.getDescricao());
+            txtValor.setText(String.valueOf(lancamento.getValor()));
+            comboCategoria.getSelectionModel().select(lancamento.getCategoria());
+            comboTipoLancamento.getSelectionModel().select(lancamento.getTipoLancamento());
+            comboFormaPagamento.getSelectionModel().select(lancamento.getFormaPagamento());
+            
+            exibirBtnDelete(true);
+            setLabelBtnSalvar(CommonStrings.ATUALIZAR);
+        }
     }
     
     @FXML
@@ -195,7 +242,8 @@ public class ListagemLancamentosController implements Initializable {
     
     @FXML
     public void sairAplicacao(ActionEvent event) {
-        //UsuarioSingleton.getInstancia().sairAplicacao();
+        UsuarioSingleton.getInstancia().setUsuario(null);
+        AppUtils.fecharTela(txtDescricao);
     }
     
     private void exibirBtnDelete(boolean exibir) {

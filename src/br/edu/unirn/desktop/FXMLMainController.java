@@ -2,6 +2,7 @@ package br.edu.unirn.desktop;
 
 import br.edu.unirn.desktop.modelos.Usuario;
 import br.edu.unirn.desktop.singleton.UsuarioSingleton;
+import br.edu.unirn.desktop.utils.AppUtils;
 import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,17 +47,13 @@ public class FXMLMainController implements Initializable {
                 stage.setScene(new Scene(root));
                 stage.show();
                 
-                fecharTelaLogin();
+                AppUtils.fecharTela(txtSenha);
             } else {
                 MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Usuário Inválido", "Usuario ou senha inválidos.");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    private void fecharTelaLogin() {
-        ((Stage) txtSenha.getScene().getWindow()).close();
     }
     
     @FXML

@@ -3,6 +3,7 @@ package br.edu.unirn.desktop.telas.usuario;
 import br.edu.unirn.desktop.OrganizadorDespesas;
 import br.edu.unirn.desktop.modelos.Usuario;
 import br.edu.unirn.desktop.singleton.UsuarioSingleton;
+import br.edu.unirn.desktop.utils.AppUtils;
 import br.edu.unirn.desktop.utils.CommonStrings;
 import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
@@ -81,6 +82,8 @@ public class UsuarioController implements Initializable {
             OrganizadorDespesas.getUsuarioDao().salvar(usuario);
             
             MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário cadastrado com sucesso!");
+            
+            AppUtils.fecharTela(txtNome);
         }
     }
     
@@ -88,7 +91,8 @@ public class UsuarioController implements Initializable {
     public void btnExcluirConta(ActionEvent event) {
         try {
             OrganizadorDespesas.getUsuarioDao().remover(UsuarioSingleton.getInstancia().getUsuario());
-            UsuarioSingleton.getInstancia().sairAplicacao();
+            UsuarioSingleton.getInstancia().setUsuario(null);
+            AppUtils.fecharTela(txtNome);
             MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário excluído com sucesso!");
         } catch (Exception e) {
             MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Ocorreu algum erro ao excluir o usuário.");

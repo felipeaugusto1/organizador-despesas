@@ -2,6 +2,7 @@ package br.edu.unirn.desktop.telas.listagemcategorias;
 
 import br.edu.unirn.desktop.OrganizadorDespesas;
 import br.edu.unirn.desktop.modelos.Categoria;
+import br.edu.unirn.desktop.singleton.UsuarioSingleton;
 import br.edu.unirn.desktop.utils.CommonStrings;
 import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -48,6 +50,8 @@ public class ListagemCategoriasController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         categoria = null;
         carregarListaCategorias();
+        
+        tvCategorias.setPlaceholder(new Label("Nenhuma categoria cadastrada."));
     }  
     
     private void carregarListaCategorias() {
@@ -72,6 +76,7 @@ public class ListagemCategoriasController implements Initializable {
                 categoria = new Categoria();
             
             categoria.setNome(txtNome.getText());
+            categoria.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
             
             if (categoria.getId() == null) {
                 MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria cadastrada com sucesso!");
@@ -91,11 +96,13 @@ public class ListagemCategoriasController implements Initializable {
     
     @FXML
     public void selecionarCategoria(MouseEvent event) {
-        exibirBtnDelete(true);
-        setLabelBtnSalvar(CommonStrings.ATUALIZAR);
-        
         categoria = tvCategorias.getSelectionModel().getSelectedItem();
-        txtNome.setText(categoria.getNome());
+        if (categoria != null) {
+            txtNome.setText(categoria.getNome());
+            
+            exibirBtnDelete(true);
+            setLabelBtnSalvar(CommonStrings.ATUALIZAR);
+        }
     }
     
     @FXML

@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="386.0" prefWidth="342.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.edu.unirn.desktop.telas.listagemcategorias.ListagemCategoriasController">
    <children>
-      <TableView fx:id="tvCategorias" layoutX="12.0" layoutY="186.0" onMouseClicked="#selecionarCategoria" prefHeight="200.0" prefWidth="320.0">
+      <TableView fx:id="tvCategorias" layoutY="186.0" onMouseClicked="#selecionarCategoria" prefHeight="200.0" prefWidth="342.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <columns>
           <TableColumn fx:id="tcNome" prefWidth="75.0" text="Nome" />
         </columns>

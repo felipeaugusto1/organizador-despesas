@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -17,12 +18,16 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @ManyToOne
+    private Usuario usuario;
+    
     private String nome;
 
     public Categoria() {
     }
 
-    public Categoria(String nome) {
+    public Categoria(String nome, Usuario usuario) {
+        this.usuario = usuario;
         this.nome = nome;
     }
 
@@ -42,6 +47,14 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    
     @Override
     public String toString() {
         return nome;
