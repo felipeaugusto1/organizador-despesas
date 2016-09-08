@@ -44,14 +44,14 @@ public class CategoriaDao extends GenericDao<Categoria, Long> {
         }
     }
     
-    public List<Categoria> buscarCategoriasPorUsuario(Usuario usuario) {
+    public List<Categoria> buscarCategoriasPorUsuario() {
         try {
             EntityManager em = getEntityManagerFactory().createEntityManager();
                 
             CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
             CriteriaQuery<Categoria> criteria = criteriaBuilder.createQuery(Categoria.class);
             Root<Categoria> root = criteria.from(Categoria.class);
-            Predicate p1 = criteriaBuilder.equal(root.get("usuario"), usuario);
+            Predicate p1 = criteriaBuilder.equal(root.get("usuario"), UsuarioSingleton.getInstancia().getUsuario());
             
             Predicate where = criteriaBuilder.and(p1);
             

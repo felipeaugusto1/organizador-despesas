@@ -80,6 +80,10 @@ public class Lancamento implements Serializable {
     public String getData() {
         return DateUtils.formatarData(data);
     }
+    
+    public Date getDataAsDate() {
+        return data;
+    }
 
     public String getDescricao() {
         return descricao;

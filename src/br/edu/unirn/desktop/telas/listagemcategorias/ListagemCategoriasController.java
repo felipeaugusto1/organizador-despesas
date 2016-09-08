@@ -63,7 +63,7 @@ public class ListagemCategoriasController implements Initializable {
     private void atualizarLista() {
         limparCampos();
         observableListCategoria.clear();
-        observableListCategoria.addAll(OrganizadorDespesas.getCategoriaDao().buscarCategoriasPorUsuario(UsuarioSingleton.getInstancia().getUsuario()));
+        observableListCategoria.addAll(OrganizadorDespesas.getCategoriaDao().buscarCategoriasPorUsuario());
         tvCategorias.setItems(observableListCategoria);
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);

@@ -64,7 +64,7 @@ public class FormasPagamentoController implements Initializable {
     private void atualizarLista() {
         limparCampos();
         observableListFormasPagamento.clear();
-        observableListFormasPagamento.addAll(OrganizadorDespesas.getFormaPagamentoDao().buscarFormasPagamentoPorUsuario(UsuarioSingleton.getInstancia().getUsuario()));
+        observableListFormasPagamento.addAll(OrganizadorDespesas.getFormaPagamentoDao().buscarFormasPagamentoPorUsuario());
         tvFormasPagamento.setItems(observableListFormasPagamento);
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);

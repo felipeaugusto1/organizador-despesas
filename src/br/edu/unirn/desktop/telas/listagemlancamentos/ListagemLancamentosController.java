@@ -7,7 +7,6 @@ import br.edu.unirn.desktop.modelos.Lancamento;
 import br.edu.unirn.desktop.modelos.TipoLancamento;
 import br.edu.unirn.desktop.singleton.UsuarioSingleton;
 import br.edu.unirn.desktop.utils.AppUtils;
-import static br.edu.unirn.desktop.utils.AppUtils.fecharTela;
 import br.edu.unirn.desktop.utils.CommonStrings;
 import br.edu.unirn.desktop.utils.MensagemUtils;
 import java.net.URL;
@@ -115,7 +114,7 @@ public class ListagemLancamentosController implements Initializable {
     }
     
     private void atualizarLista() {
-        List<Lancamento> lancamentos = OrganizadorDespesas.getLancamentoDao().listarLancamentosPorUsuario(UsuarioSingleton.getInstancia().getUsuario());
+        List<Lancamento> lancamentos = OrganizadorDespesas.getLancamentoDao().listarLancamentosPorUsuario();
         
         txtSaldo.setText(String.valueOf(calcularSaldo(lancamentos)));
         limparCampos();
@@ -247,6 +246,18 @@ public class ListagemLancamentosController implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void btnVisualizarRelatorioMensal(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("br/edu/unirn/desktop/telas/relatoriogastos/RelatorioGastos.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Relatório de Gastos Mensal");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     @FXML
     public void sairAplicacao(ActionEvent event) {
@@ -273,7 +284,7 @@ public class ListagemLancamentosController implements Initializable {
     }
     
     private void atualizarListaCategorias() {
-        List<Categoria> categorias = OrganizadorDespesas.getCategoriaDao().buscarCategoriasPorUsuario(UsuarioSingleton.getInstancia().getUsuario());
+        List<Categoria> categorias = OrganizadorDespesas.getCategoriaDao().buscarCategoriasPorUsuario();
         
         comboCategoria.getItems().clear();
         comboCategoria.getItems().addAll(categorias);
@@ -283,7 +294,7 @@ public class ListagemLancamentosController implements Initializable {
     }
     
     private void atualizarListaFormasPagamento() {
-        List<FormaPagamento> formasPagamento = OrganizadorDespesas.getFormaPagamentoDao().buscarFormasPagamentoPorUsuario(UsuarioSingleton.getInstancia().getUsuario());
+        List<FormaPagamento> formasPagamento = OrganizadorDespesas.getFormaPagamentoDao().buscarFormasPagamentoPorUsuario();
         
         comboFormaPagamento.getItems().clear();
         comboFormaPagamento.getItems().addAll(formasPagamento);
