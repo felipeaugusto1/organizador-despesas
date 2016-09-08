@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
@@ -32,7 +33,7 @@ public class UsuarioController implements Initializable {
     private TextField txtUsuario;
     
     @FXML
-    private TextField txtSenha;
+    private PasswordField txtSenha;
     
     @FXML
     private Button btnSalvar;
@@ -61,29 +62,46 @@ public class UsuarioController implements Initializable {
     @FXML
     public void btnSalvarUsuario(ActionEvent event) {
         Usuario usuario = UsuarioSingleton.getInstancia().getUsuario();
-        if (usuario != null) {
-            usuario.setNome(txtNome.getText());
-            usuario.setEmail(txtEmail.getText());
-            usuario.setUsuario(txtUsuario.getText());
-            usuario.setSenha(txtSenha.getText());
-            
-            UsuarioSingleton.getInstancia().setUsuario(usuario);
-            OrganizadorDespesas.getUsuarioDao().atualizar(usuario);
-            
-            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário atualizado com sucesso!");
+        
+        String nome = txtNome.getText();
+        nome = nome.replaceAll(" ", "");
+        
+        String email = txtEmail.getText();
+        email = email.replaceAll(" ", "");
+        
+        String senha = txtSenha.getText();
+        senha = senha.replaceAll(" ", "");
+        
+        String nomeUsuario = txtUsuario.getText();
+        nomeUsuario = nomeUsuario.replaceAll(" ", "");
+        
+        if (!nome.isEmpty() && !email.isEmpty() && !senha.isEmpty() && !nomeUsuario.isEmpty()) {
+            if (usuario != null) {
+                usuario.setNome(txtNome.getText());
+                usuario.setEmail(txtEmail.getText());
+                usuario.setUsuario(txtUsuario.getText());
+                usuario.setSenha(txtSenha.getText());
+
+                UsuarioSingleton.getInstancia().setUsuario(usuario);
+                OrganizadorDespesas.getUsuarioDao().atualizar(usuario);
+
+                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário atualizado com sucesso!");
+            } else {
+                usuario = new Usuario();
+
+                usuario.setNome(txtNome.getText());
+                usuario.setEmail(txtEmail.getText());
+                usuario.setUsuario(txtUsuario.getText());
+                usuario.setSenha(txtSenha.getText());
+
+                OrganizadorDespesas.getUsuarioDao().salvar(usuario);
+
+                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário cadastrado com sucesso!");
+
+                AppUtils.fecharTela(txtNome);
+            }
         } else {
-            usuario = new Usuario();
-            
-            usuario.setNome(txtNome.getText());
-            usuario.setEmail(txtEmail.getText());
-            usuario.setUsuario(txtUsuario.getText());
-            usuario.setSenha(txtSenha.getText());
-            
-            OrganizadorDespesas.getUsuarioDao().salvar(usuario);
-            
-            MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Usuário", "Usuário cadastrado com sucesso!");
-            
-            AppUtils.fecharTela(txtNome);
+            MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Usuário", "Por favor informe todos os campos corretamente");
         }
     }
     

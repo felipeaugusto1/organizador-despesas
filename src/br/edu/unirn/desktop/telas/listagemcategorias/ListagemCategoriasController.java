@@ -63,7 +63,7 @@ public class ListagemCategoriasController implements Initializable {
     private void atualizarLista() {
         limparCampos();
         observableListCategoria.clear();
-        observableListCategoria.addAll(OrganizadorDespesas.getCategoriaDao().listarTodos());
+        observableListCategoria.addAll(OrganizadorDespesas.getCategoriaDao().buscarCategoriasPorUsuario(UsuarioSingleton.getInstancia().getUsuario()));
         tvCategorias.setItems(observableListCategoria);
         exibirBtnDelete(false);
         setLabelBtnSalvar(CommonStrings.CADASTRAR);
@@ -72,23 +72,30 @@ public class ListagemCategoriasController implements Initializable {
     @FXML
     public void btnSalvarCategoria(ActionEvent event) {
         try {
-            if (categoria == null)
-                categoria = new Categoria();
+            String nomeCategoria = txtNome.getText();
+            nomeCategoria = nomeCategoria.replaceAll(" ", "");
             
-            categoria.setNome(txtNome.getText());
-            categoria.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+            if (!nomeCategoria.isEmpty()) {
+                if (categoria == null)
+                    categoria = new Categoria();
             
-            if (categoria.getId() == null) {
-                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria cadastrada com sucesso!");
-                OrganizadorDespesas.getCategoriaDao().salvar(categoria);
+                categoria.setNome(txtNome.getText());
+                categoria.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+
+                if (categoria.getId() == null) {
+                    MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria cadastrada com sucesso!");
+                    OrganizadorDespesas.getCategoriaDao().salvar(categoria);
+                } else {
+                    MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria atualizada com sucesso!");
+                    OrganizadorDespesas.getCategoriaDao().atualizar(categoria);
+                }
+
+                categoria = null;
+
+                atualizarLista();
             } else {
-                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Categoria", "Categoria atualizada com sucesso!");
-                OrganizadorDespesas.getCategoriaDao().atualizar(categoria);
+                MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Categoria", "Por favor, informe o nome da categoria.");
             }
-            
-            categoria = null;
-            
-            atualizarLista();
         } catch (Exception e) {
             MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Categoria", "Ocorreu um erro ao cadastrar a categoria.");
         }

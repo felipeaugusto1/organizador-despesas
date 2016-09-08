@@ -3,10 +3,6 @@
   <persistence-unit name="OrganizadorDespesasPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     
-    <class>br.edu.unirn.desktop.modelos.Lancamento</class>
-    <class>br.edu.unirn.desktop.modelos.Categoria</class>
-    <class>br.edu.unirn.desktop.modelos.Usuario</class>
-    
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/organizador-despesas"/>
       <property name="javax.persistence.jdbc.user" value="organizador-despesas"/>

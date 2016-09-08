@@ -4,8 +4,6 @@ import br.edu.unirn.desktop.dao.CategoriaDao;
 import br.edu.unirn.desktop.dao.FormaPagamentoDao;
 import br.edu.unirn.desktop.dao.LancamentoDao;
 import br.edu.unirn.desktop.dao.UsuarioDao;
-import br.edu.unirn.desktop.modelos.Categoria;
-import br.edu.unirn.desktop.singleton.UsuarioSingleton;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,20 +32,10 @@ public class OrganizadorDespesas extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
         
-        //inserirCategorias();
-        
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
         stage.show();
-    }
-    
-    private void inserirCategorias() {
-        if (getCategoriaDao().buscarCategoriaPessoal() == null) {
-            getCategoriaDao().salvar(new Categoria("Pessoal", UsuarioSingleton.getInstancia().getUsuario()));
-            getCategoriaDao().salvar(new Categoria("Transporte", UsuarioSingleton.getInstancia().getUsuario()));
-            getCategoriaDao().salvar(new Categoria("Alimentação", UsuarioSingleton.getInstancia().getUsuario()));
-        }
     }
 
     /**

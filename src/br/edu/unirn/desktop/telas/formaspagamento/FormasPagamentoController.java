@@ -73,23 +73,31 @@ public class FormasPagamentoController implements Initializable {
     @FXML
     public void btnSalvarFormaPagamento(ActionEvent event) {
         try {
-            if (formaPagamento == null)
-                formaPagamento = new FormaPagamento();
+            String forma = txtNome.getText();
+            forma = forma.replaceAll(" ", "");
             
-            formaPagamento.setNome(txtNome.getText());
-            formaPagamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+            if (!forma.isEmpty()) {
+                if (formaPagamento == null)
+                    formaPagamento = new FormaPagamento();
             
-            if (formaPagamento.getId() == null) {
-                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Forma de Pagamento", "Forma de pagamento cadastrada com sucesso!");
-                OrganizadorDespesas.getFormaPagamentoDao().salvar(formaPagamento);
+                formaPagamento.setNome(txtNome.getText());
+                formaPagamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+
+                if (formaPagamento.getId() == null) {
+                    MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Forma de Pagamento", "Forma de pagamento cadastrada com sucesso!");
+                    OrganizadorDespesas.getFormaPagamentoDao().salvar(formaPagamento);
+                } else {
+                    MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Forma de Pagamento", "Forma de pagamento atualizada com sucesso!");
+                    OrganizadorDespesas.getFormaPagamentoDao().atualizar(formaPagamento);
+                }
+
+                formaPagamento = null;
+
+                atualizarLista();
             } else {
-                MensagemUtils.exibirMensagem(Alert.AlertType.CONFIRMATION, "Forma de Pagamento", "Forma de pagamento atualizada com sucesso!");
-                OrganizadorDespesas.getFormaPagamentoDao().atualizar(formaPagamento);
+                MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Forma de Pagamento", "Por favor, informe o nome da forma de pagamento.");
             }
             
-            formaPagamento = null;
-            
-            atualizarLista();
         } catch (Exception e) {
             MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Forma de Pagamento", "Ocorreu um erro ao cadastrar a Forma de pagamento.");
         }
