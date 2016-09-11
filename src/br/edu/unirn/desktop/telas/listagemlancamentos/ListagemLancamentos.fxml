@@ -55,7 +55,7 @@
       <TextField fx:id="txtDescricao" layoutX="115.0" layoutY="62.0" />
       <TextField fx:id="txtValor" layoutX="115.0" layoutY="97.0" prefHeight="27.0" prefWidth="167.0" />
       <ComboBox fx:id="comboCategoria" layoutX="115.0" layoutY="167.0" onMouseClicked="#atualizarListaCategorias" prefHeight="27.0" prefWidth="167.0" />
-      <ComboBox fx:id="comboTipoLancamento" layoutX="115.0" layoutY="132.0" prefHeight="27.0" prefWidth="167.0" />
+      <ComboBox fx:id="comboTipoLancamento" layoutX="115.0" layoutY="132.0" onAction="#selecionarTipoLancamento" prefHeight="27.0" prefWidth="167.0" />
       <Button fx:id="btnSalvar" layoutX="15.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnSalvarLancamento" prefHeight="27.0" prefWidth="86.0" text="Cadastrar" />
       <Button fx:id="btnDeletar" layoutX="257.0" layoutY="250.0" mnemonicParsing="false" onAction="#deletarLancamento" text="Deletar" />
       <Button layoutX="115.0" layoutY="250.0" mnemonicParsing="false" onAction="#limparCampos" prefHeight="27.0" prefWidth="127.0" text="Limpar Campos" />

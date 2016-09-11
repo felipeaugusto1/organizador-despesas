@@ -91,6 +91,7 @@ public class ListagemLancamentosController implements Initializable {
         
         comboTipoLancamento.getItems().addAll(tipoLancamentos);
         comboTipoLancamento.getSelectionModel().select(tipoLancamentos.get(0));
+        selecionarTipoLancamento();
         
         atualizarListaCategorias();
         atualizarListaFormasPagamento();
@@ -149,24 +150,30 @@ public class ListagemLancamentosController implements Initializable {
         Categoria categoria = comboCategoria.getSelectionModel().getSelectedItem();
         FormaPagamento formaPagamento = comboFormaPagamento.getSelectionModel().getSelectedItem();
         
-        if (!descricao.isEmpty() && !valor.isEmpty() && categoria != null && formaPagamento != null) {
+        String tipoLancamento = comboTipoLancamento.getSelectionModel().getSelectedItem();
+        
+        if (!descricao.isEmpty() && !valor.isEmpty() && categoria != null && ((tipoLancamento.equals(TipoLancamento.DESPESA.getValor()) && formaPagamento != null) || tipoLancamento.equals(TipoLancamento.RECEITA.getValor()))) {
             if (lancamento == null)
                 lancamento = new Lancamento();
 
-            lancamento.setDescricao(txtDescricao.getText());
-            lancamento.setValor(Double.parseDouble(txtValor.getText()));
-            lancamento.setTipoLancamento(comboTipoLancamento.getSelectionModel().getSelectedItem().equals(TipoLancamento.RECEITA.getValor()) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
-            lancamento.setCategoria(comboCategoria.getSelectionModel().getSelectedItem());
-            lancamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
-            lancamento.setFormaPagamento(comboFormaPagamento.getSelectionModel().getSelectedItem());
+            try {
+                lancamento.setDescricao(txtDescricao.getText());
+                lancamento.setValor(Double.parseDouble(txtValor.getText()));
+                lancamento.setTipoLancamento(tipoLancamento.equals(TipoLancamento.RECEITA.getValor()) ? TipoLancamento.RECEITA : TipoLancamento.DESPESA);
+                lancamento.setCategoria(comboCategoria.getSelectionModel().getSelectedItem());
+                lancamento.setUsuario(UsuarioSingleton.getInstancia().getUsuario());
+                lancamento.setFormaPagamento(tipoLancamento.equals(TipoLancamento.RECEITA.getValor()) ? null : comboFormaPagamento.getSelectionModel().getSelectedItem());
 
-            if (lancamento.getId() == null)
-                OrganizadorDespesas.getLancamentoDao().salvar(lancamento);
-            else
-                OrganizadorDespesas.getLancamentoDao().atualizar(lancamento);
+                if (lancamento.getId() == null)
+                    OrganizadorDespesas.getLancamentoDao().salvar(lancamento);
+                else
+                    OrganizadorDespesas.getLancamentoDao().atualizar(lancamento);
 
-            lancamento = null;
-            atualizarLista();
+                lancamento = null;
+                atualizarLista();
+            } catch (NumberFormatException e) {
+                MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Lançamento", "Digite o valor corretamente. Ex: 100 ou 100.00");
+            }
         } else {
             MensagemUtils.exibirMensagem(Alert.AlertType.ERROR, "Lançamento", "Por favor, preencha todos os campos corretamente.");
         }
@@ -212,6 +219,16 @@ public class ListagemLancamentosController implements Initializable {
             exibirBtnDelete(true);
             setLabelBtnSalvar(CommonStrings.ATUALIZAR);
         }
+    }
+    
+    @FXML
+    private void selecionarTipoLancamento() {
+        String tipoLancamento = comboTipoLancamento.getSelectionModel().getSelectedItem();
+        
+        if (tipoLancamento.equals(TipoLancamento.RECEITA.getValor()))
+            comboFormaPagamento.setDisable(true);
+        else
+            comboFormaPagamento.setDisable(false);
     }
     
     @FXML
